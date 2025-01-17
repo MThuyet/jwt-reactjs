@@ -1,4 +1,5 @@
 import './Login.scss';
+import { Link } from 'react-router-dom';
 
 const Login = (props) => {
   return (
@@ -25,7 +26,9 @@ const Login = (props) => {
             <hr />
 
             <div className="text-center">
-              <button className="btn btn-success">Create new account</button>
+              <Link to="/register" className="btn btn-success">
+                Create new account
+              </Link>
             </div>
           </div>
         </div>
