@@ -2,6 +2,7 @@ import './Register.scss';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const Register = (props) => {
   // init state
@@ -13,8 +14,40 @@ const Register = (props) => {
 
   // handle button register
   const handleRegister = () => {
+    let check = isValidInput();
     let userData = { email, phone, username, password, confirmPassword };
     console.log('check user data', userData);
+  };
+
+  // validate form
+  const isValidInput = () => {
+    if (!email) {
+      toast.error('Email is required');
+      return false;
+    }
+    if (!phone) {
+      toast.error('Phone is required');
+      return false;
+    }
+    if (!username) {
+      toast.error('Username is required');
+      return false;
+    }
+    if (!password) {
+      toast.error('Password is required');
+      return false;
+    }
+    if (password !== confirmPassword) {
+      toast.error('Your password is not the same');
+      return false;
+    }
+    let regx = /\S+@\S+\.\S+/;
+    if (regx.test(email) === false) {
+      toast.error('Email is invalid');
+      return false;
+    }
+
+    return true;
   };
 
   return (
@@ -94,7 +127,13 @@ const Register = (props) => {
               />
             </div>
 
-            <button className="btn btn-primary" onClick={() => handleRegister()}>
+            <button
+              className="btn btn-primary"
+              type="submit"
+              onClick={() => {
+                handleRegister();
+              }}
+            >
               Register
             </button>
 
