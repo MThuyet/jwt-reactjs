@@ -1,7 +1,13 @@
 import './Register.scss';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const Register = (props) => {
+  useEffect(() => {
+    axios.get('http://localhost:8080/api/test-api').then((res) => console.log('check data ', res));
+  }, []);
+
   return (
     <div className="register-container">
       <div className="container">
