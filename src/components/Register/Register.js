@@ -25,23 +25,7 @@ const Register = (props) => {
     isValidPassword: true,
     isValidConfirmPassword: true,
   };
-
   const [objCheckInput, setObjCheckInput] = useState(defaultValidInput);
-
-  // handle button register
-  const handleRegister = async () => {
-    let check = isValidInput();
-    if (check === true) {
-      let res = await RegisterUser(email, username, phone, password);
-      let serverData = res.data;
-      if (+serverData.EC === 0) {
-        toast.success(serverData.EM);
-        history.push('/login');
-      } else {
-        toast.error(serverData.EM);
-      }
-    }
-  };
 
   // validate form
   const isValidInput = () => {
@@ -82,6 +66,21 @@ const Register = (props) => {
     }
 
     return true;
+  };
+
+  // handle button register
+  const handleRegister = async () => {
+    let check = isValidInput();
+    if (check === true) {
+      let res = await RegisterUser(email, username, phone, password);
+      let serverData = res.data;
+      if (+serverData.EC === 0) {
+        toast.success(serverData.EM);
+        history.push('/login');
+      } else {
+        toast.error(serverData.EM);
+      }
+    }
   };
 
   return (
