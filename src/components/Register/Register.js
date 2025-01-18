@@ -1,13 +1,15 @@
 import './Register.scss';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { RegisterUser } from '../../services/UserService';
 
 const Register = (props) => {
-  useEffect(() => {
-    // axios.get('http://localhost:8080/api/test-api').then((res) => console.log(res.data));
-  }, []);
+  let history = useHistory();
+  // useEffect(() => {
+  //   // axios.get('http://localhost:8080/api/test-api').then((res) => console.log(res.data));
+  // }, []);
 
   // init state
   const [email, setEmail] = useState('');
@@ -27,12 +29,17 @@ const Register = (props) => {
   const [objCheckInput, setObjCheckInput] = useState(defaultValidInput);
 
   // handle button register
-  const handleRegister = () => {
+  const handleRegister = async () => {
     let check = isValidInput();
     if (check === true) {
-      axios
-        .post('http://localhost:8080/api/register', { email, username, phone, password })
-        .then((res) => console.log(res));
+      let res = await RegisterUser(email, username, phone, password);
+      let serverData = res.data;
+      if (+serverData.EC === 0) {
+        toast.success(serverData.EM);
+        history.push('/login');
+      } else {
+        toast.error(serverData.EM);
+      }
     }
   };
 
@@ -146,7 +153,7 @@ const Register = (props) => {
               <input
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                type="re-enter-password"
+                type="password"
                 id="re-enter-password"
                 name="re-enter-password"
                 className={objCheckInput.isValidConfirmPassword ? 'form-control' : 'form-control is-invalid'}

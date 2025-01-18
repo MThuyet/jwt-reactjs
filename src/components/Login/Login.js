@@ -18,9 +18,9 @@ const Login = (props) => {
             <button className="btn btn-primary">Login</button>
 
             <span className="text-center">
-              <a className="forgot-password" href="#">
+              <Link className="forgot-password" to="/register">
                 Forgot your password?
-              </a>
+              </Link>
             </span>
 
             <hr />
