@@ -33,7 +33,25 @@ const Login = (props) => {
       return;
     }
 
-    await LoginUser(valueLogin, password);
+    let res = await LoginUser(valueLogin, password);
+
+    // success
+    if (res && res.data && +res.data.EC === 0) {
+      let data = {
+        isAuthenticated: true,
+        token: 'fake token',
+      };
+
+      sessionStorage.setItem('account', JSON.stringify(data));
+      toast.success(res.data.EM);
+      history.push('/users');
+    }
+
+    // fail
+    if (res && res.data && +res.data.EC !== 0) {
+      // fail
+      toast.error(res.data.EM);
+    }
   };
 
   return (
