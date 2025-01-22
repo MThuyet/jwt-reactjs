@@ -1,0 +1,21 @@
+import { useEffect } from 'react';
+import { Route, useHistory } from 'react-router-dom';
+
+const PrivateRoutes = (props) => {
+  let history = useHistory();
+
+  useEffect(() => {
+    let sessionAccount = sessionStorage.getItem('account');
+    if (!sessionAccount) {
+      history.push('/login');
+      window.location.reload();
+    }
+  }, []);
+  return (
+    <>
+      <Route path={props.path} component={props.component} />
+    </>
+  );
+};
+
+export default PrivateRoutes;

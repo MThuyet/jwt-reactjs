@@ -1,6 +1,6 @@
 import './Login.scss';
 import { Link, useHistory } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { LoginUser } from '../../services/UserService';
 
@@ -45,6 +45,7 @@ const Login = (props) => {
       sessionStorage.setItem('account', JSON.stringify(data));
       toast.success(res.data.EM);
       history.push('/users');
+      window.location.reload();
     }
 
     // fail
@@ -53,6 +54,20 @@ const Login = (props) => {
       toast.error(res.data.EM);
     }
   };
+
+  const handlePressEnter = (e) => {
+    if (e.code === 'Enter' && e.which === 13) {
+      handleLogin();
+    }
+  };
+
+  useEffect(() => {
+    let sessionAccount = sessionStorage.getItem('account');
+    if (sessionAccount) {
+      history.push('/');
+      window.location.reload();
+    }
+  }, []);
 
   return (
     <div className="login-container">
@@ -76,6 +91,9 @@ const Login = (props) => {
             />
             <input
               value={password}
+              onKeyPress={(e) => {
+                handlePressEnter(e);
+              }}
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
