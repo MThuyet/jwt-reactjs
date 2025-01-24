@@ -1,13 +1,18 @@
 import { useEffect, useState } from 'react';
 import './Users.scss';
-import { fetchAllUser } from '../../services/UserService';
+import { fetchAllUser, deleteUser } from '../../services/UserService';
 import ReactPaginate from 'react-paginate';
+import { toast } from 'react-toastify';
+import ModalDelete from './ModalDelete';
 
 const Users = (props) => {
   const [listUser, setListUser] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentLimit, setCurrentLimit] = useState(3);
   const [totalPage, setTotalPage] = useState(0);
+
+  const [isShowModalDelete, setIsShowModalDelete] = useState(false);
+  const [dataModel, setDataModel] = useState({});
 
   useEffect(() => {
     fetchUser();
@@ -21,94 +26,123 @@ const Users = (props) => {
     }
   };
 
+  // handle pagination
   const handlePageClick = async (event) => {
     setCurrentPage(event.selected + 1);
   };
 
+  // handle delete user
+  const handleDeleteUser = async (user) => {
+    setDataModel(user);
+    setIsShowModalDelete(true);
+  };
+
+  const handleClose = () => {
+    setIsShowModalDelete(false);
+    setDataModel({});
+  };
+
+  const confirmDeleteUser = async () => {
+    let res = await deleteUser(dataModel);
+    if (res && res.data && +res.data.EC === 0) {
+      toast.success(res.data.EM);
+      await fetchUser();
+      setIsShowModalDelete(false);
+    } else {
+      toast.error(res.data.EM);
+    }
+  };
+
   return (
-    <div className="container">
-      <div className="manage-user-container">
-        <div className="user-header">
-          <div className="title">
-            <h3 className="my-3">Table Users</h3>
+    <>
+      <div className="container">
+        <div className="manage-user-container">
+          <div className="user-header">
+            <div className="title">
+              <h3 className="my-3">Table Users</h3>
+            </div>
+
+            <div className="action">
+              <button className="btn btn-success">Refresh</button>
+              <button className="btn btn-primary mx-3">Add new user</button>
+            </div>
           </div>
 
-          <div className="action">
-            <button className="btn btn-success">Refresh</button>
-            <button className="btn btn-primary mx-3">Add new user</button>
+          <div className="user-body mt-3">
+            <table className="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">NO</th>
+                  <th scope="col">ID</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Username</th>
+                  <th scope="col">Group</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {listUser && listUser.length > 0 ? (
+                  <>
+                    {listUser.map((user, index) => {
+                      return (
+                        <tr key={`row-${index}`}>
+                          <td>{index + 1}</td>
+                          <td>{user.id}</td>
+                          <td>{user.email}</td>
+                          <td>{user.username}</td>
+                          <td>{user.Group ? user.Group.name : ''}</td>
+                          <td>
+                            <button className="btn btn-warning mx-2">Edit</button>
+                            <button onClick={() => handleDeleteUser(user)} className="btn btn-danger">
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <>
+                    <tr>
+                      <td className="text-center" colSpan={5}>
+                        Not found user
+                      </td>
+                    </tr>
+                  </>
+                )}
+              </tbody>
+            </table>
           </div>
+
+          {totalPage > 0 && (
+            <div className="user-footer">
+              <ReactPaginate
+                nextLabel="next >"
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={3}
+                marginPagesDisplayed={2}
+                pageCount={totalPage}
+                previousLabel="< previous"
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousClassName="page-item"
+                previousLinkClassName="page-link"
+                nextClassName="page-item"
+                nextLinkClassName="page-link"
+                breakLabel="..."
+                breakClassName="page-item"
+                breakLinkClassName="page-link"
+                containerClassName="pagination"
+                activeClassName="active"
+                renderOnZeroPageCount={null}
+              />
+            </div>
+          )}
         </div>
-
-        <div className="user-body mt-3">
-          <table className="table table-hover table-bordered">
-            <thead>
-              <tr>
-                <th scope="col">NO</th>
-                <th scope="col">ID</th>
-                <th scope="col">Email</th>
-                <th scope="col">Username</th>
-                <th scope="col">Group</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {listUser && listUser.length > 0 ? (
-                <>
-                  {listUser.map((user, index) => {
-                    return (
-                      <tr key={`row-${index}`}>
-                        <td>{index + 1}</td>
-                        <td>{user.id}</td>
-                        <td>{user.email}</td>
-                        <td>{user.username}</td>
-                        <td>{user.Group ? user.Group.name : ''}</td>
-                        <td>
-                          <button className="btn btn-warning mx-2">Edit</button>
-                          <button className="btn btn-danger">Delete</button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </>
-              ) : (
-                <>
-                  <tr>
-                    <td className="text-center" colSpan={5}>
-                      Not found user
-                    </td>
-                  </tr>
-                </>
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        {totalPage > 0 && (
-          <div className="user-footer">
-            <ReactPaginate
-              nextLabel="next >"
-              onPageChange={handlePageClick}
-              pageRangeDisplayed={3}
-              marginPagesDisplayed={2}
-              pageCount={totalPage}
-              previousLabel="< previous"
-              pageClassName="page-item"
-              pageLinkClassName="page-link"
-              previousClassName="page-item"
-              previousLinkClassName="page-link"
-              nextClassName="page-item"
-              nextLinkClassName="page-link"
-              breakLabel="..."
-              breakClassName="page-item"
-              breakLinkClassName="page-link"
-              containerClassName="pagination"
-              activeClassName="active"
-              renderOnZeroPageCount={null}
-            />
-          </div>
-        )}
       </div>
-    </div>
+
+      <ModalDelete show={isShowModalDelete} handleClose={handleClose} confirmDeleteUser={confirmDeleteUser} dataModel={dataModel} />
+    </>
   );
 };
 
