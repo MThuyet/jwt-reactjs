@@ -8,4 +8,8 @@ const LoginUser = (valueLogin, password) => {
   return axios.post('http://localhost:8080/api/login', { valueLogin, password });
 };
 
-export { RegisterUser, LoginUser };
+const fetchAllUser = (page, limit) => {
+  return axios.get(`http://localhost:8080/api/user/read?page=${page}&limit=${limit}`);
+};
+
+export { RegisterUser, LoginUser, fetchAllUser };
