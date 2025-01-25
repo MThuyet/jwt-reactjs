@@ -2,3 +2,12 @@
   .content-body {
   }
 }
+
+.manage-user-container {
+  .user-body {
+    tr > th,
+    tr > td {
+      text-align: center;
+    }
+  }
+}

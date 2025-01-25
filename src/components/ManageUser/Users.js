@@ -15,6 +15,8 @@ const Users = (props) => {
   const [isShowModalDelete, setIsShowModalDelete] = useState(false);
   const [dataModel, setDataModel] = useState({});
 
+  const [isShowModalUser, setIsShowModalUser] = useState(false);
+
   useEffect(() => {
     fetchUser();
   }, [currentPage]);
@@ -54,6 +56,11 @@ const Users = (props) => {
     }
   };
 
+  // handle hide model user
+  const onHideModelUser = () => {
+    setIsShowModalUser(false);
+  };
+
   return (
     <>
       <div className="container">
@@ -65,7 +72,9 @@ const Users = (props) => {
 
             <div className="action">
               <button className="btn btn-success">Refresh</button>
-              <button className="btn btn-primary mx-3">Add new user</button>
+              <button onClick={() => setIsShowModalUser(true)} className="btn btn-primary mx-3">
+                Add new user
+              </button>
             </div>
           </div>
 
@@ -76,7 +85,9 @@ const Users = (props) => {
                   <th scope="col">NO</th>
                   <th scope="col">ID</th>
                   <th scope="col">Email</th>
+                  <th scope="col">Phone</th>
                   <th scope="col">Username</th>
+                  <th scope="col">Sex</th>
                   <th scope="col">Group</th>
                   <th scope="col">Action</th>
                 </tr>
@@ -87,10 +98,12 @@ const Users = (props) => {
                     {listUser.map((user, index) => {
                       return (
                         <tr key={`row-${index}`}>
-                          <td>{index + 1}</td>
+                          <td>{(currentPage - 1) * currentLimit + index + 1}</td>
                           <td>{user.id}</td>
                           <td>{user.email}</td>
+                          <td>{user.phone}</td>
                           <td>{user.username}</td>
+                          <td>{user.sex}</td>
                           <td>{user.Group ? user.Group.name : ''}</td>
                           <td>
                             <button className="btn btn-warning mx-2">Edit</button>
@@ -143,7 +156,7 @@ const Users = (props) => {
       </div>
 
       <ModalDelete show={isShowModalDelete} handleClose={handleClose} confirmDeleteUser={confirmDeleteUser} dataModel={dataModel} />
-      <ModalUser title="Create new user" />
+      <ModalUser title="Create new user" onHide={onHideModelUser} show={isShowModalUser} />
     </>
   );
 };
