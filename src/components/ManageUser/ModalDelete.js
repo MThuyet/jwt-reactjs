@@ -8,7 +8,7 @@ const ModalDelete = (props) => {
         <Modal.Header closeButton>
           <Modal.Title className="text-danger">Confirm Delete User</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="fw-bold">Are you sure you want to delete this user: {props.dataModel.username}?</Modal.Body>
+        <Modal.Body className="fw-bold">Are you sure you want to delete this user: {props.dataModal.username}?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={props.handleClose}>
             Close
