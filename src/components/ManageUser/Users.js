@@ -40,9 +40,9 @@ const Users = (props) => {
 
   const fetchUser = async () => {
     let res = await fetchAllUser(currentPage, currentLimit);
-    if (res && res.data && +res.data.EC === 0) {
-      setTotalPage(res.data.DT.totalPage);
-      setListUser(res.data.DT.users);
+    if (res && +res.EC === 0) {
+      setTotalPage(res.DT.totalPage);
+      setListUser(res.DT.users);
     }
   };
 
@@ -64,12 +64,12 @@ const Users = (props) => {
 
   const confirmDeleteUser = async () => {
     let res = await deleteUser(dataModal);
-    if (res && res.data && +res.data.EC === 0) {
-      toast.success(res.data.EM);
+    if (res && +res.EC === 0) {
+      toast.success(res.EM);
       await fetchUser();
       setIsShowModalDelete(false);
     } else {
-      toast.error(res.data.EM);
+      toast.error(res.EM);
     }
   };
 
@@ -99,7 +99,7 @@ const Users = (props) => {
                 <i className="fa fa-refresh"></i> Refresh
               </button>
               <button onClick={() => handleAddNewUser()} className="btn btn-primary mx-3">
-                <i class="fa fa-plus-circle"></i> Add new user
+                <i className="fa fa-plus-circle"></i> Add new user
               </button>
             </div>
           </div>
@@ -108,7 +108,7 @@ const Users = (props) => {
             <table className="table table-hover table-bordered">
               <thead>
                 <tr>
-                  <th scope="col">NO</th>
+                  <th scope="col">No</th>
                   <th scope="col">ID</th>
                   <th scope="col">Email</th>
                   <th scope="col">Phone</th>
@@ -133,10 +133,10 @@ const Users = (props) => {
                           <td>{user.Group ? user.Group.name : ''}</td>
                           <td>
                             <span title="Edit" className="btn btn-warning mx-2" onClick={() => handleEditUser(user)}>
-                              <i class="fa fa-pencil-square-o"></i>
+                              <i className="fa fa-pencil-square-o"></i>
                             </span>
                             <span title="Delete" onClick={() => handleDeleteUser(user)} className="btn btn-danger">
-                              <i class="fa fa-trash-o"></i>
+                              <i className="fa fa-trash-o"></i>
                             </span>
                           </td>
                         </tr>
