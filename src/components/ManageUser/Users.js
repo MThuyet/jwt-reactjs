@@ -9,7 +9,7 @@ import ModalUser from './ModalUser';
 const Users = (props) => {
   const [listUser, setListUser] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentLimit, setCurrentLimit] = useState(3);
+  const [currentLimit, setCurrentLimit] = useState(6);
   const [totalPage, setTotalPage] = useState(0);
 
   // modal create
@@ -80,6 +80,11 @@ const Users = (props) => {
     await fetchUser();
   };
 
+  // handle refresh
+  const handleRefresh = async () => {
+    await fetchUser();
+  };
+
   return (
     <>
       <div className="container">
@@ -90,9 +95,11 @@ const Users = (props) => {
             </div>
 
             <div className="action">
-              <button className="btn btn-success">Refresh</button>
+              <button onClick={() => handleRefresh()} className="btn btn-success">
+                <i className="fa fa-refresh"></i> Refresh
+              </button>
               <button onClick={() => handleAddNewUser()} className="btn btn-primary mx-3">
-                Add new user
+                <i class="fa fa-plus-circle"></i> Add new user
               </button>
             </div>
           </div>
@@ -125,12 +132,12 @@ const Users = (props) => {
                           <td>{user.sex}</td>
                           <td>{user.Group ? user.Group.name : ''}</td>
                           <td>
-                            <button className="btn btn-warning mx-2" onClick={() => handleEditUser(user)}>
-                              Edit
-                            </button>
-                            <button onClick={() => handleDeleteUser(user)} className="btn btn-danger">
-                              Delete
-                            </button>
+                            <span title="Edit" className="btn btn-warning mx-2" onClick={() => handleEditUser(user)}>
+                              <i class="fa fa-pencil-square-o"></i>
+                            </span>
+                            <span title="Delete" onClick={() => handleDeleteUser(user)} className="btn btn-danger">
+                              <i class="fa fa-trash-o"></i>
+                            </span>
                           </td>
                         </tr>
                       );

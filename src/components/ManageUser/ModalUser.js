@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useState, useEffect } from 'react';
-import { fetchGroup, createNewUser } from '../../services/UserService';
+import { fetchGroup, createNewUser, updateUser } from '../../services/UserService';
 import { toast } from 'react-toastify';
 import _ from 'lodash';
 
@@ -14,7 +14,7 @@ const ModalUser = (props) => {
     username: '',
     password: '',
     address: '',
-    sex: 'Male',
+    sex: '',
     groupId: '',
   };
 
@@ -72,6 +72,7 @@ const ModalUser = (props) => {
   };
 
   const checkValidateInput = (event) => {
+    if (action === 'UPDATE') return true;
     setValidInputs(validInputsDefault);
 
     let arr = ['email', 'phone', 'username', 'password', 'groupId'];
@@ -94,11 +95,12 @@ const ModalUser = (props) => {
     // create user
     let check = checkValidateInput();
     if (check === true) {
-      let res = await createNewUser(userData);
+      let res = action === 'CREATE' ? await createNewUser(userData) : await updateUser(userData);
       if (res && res.data && +res.data.EC === 0) {
         toast.success(res.data.EM);
         props.onHide();
-        setUserData({ ...defaultUserData, groupId: userGroup[0].id });
+        setUserData({ ...defaultUserData, groupId: userGroup && userGroup.length > 0 ? userGroup[0].id : '' });
+        setValidInputs(validInputsDefault);
       } else {
         toast.error(res.data.EM);
         let _validInputs = _.cloneDeep(validInputsDefault);
@@ -198,7 +200,8 @@ const ModalUser = (props) => {
                 id="groupId"
                 name="groupId"
                 onChange={(event) => handleOnChangeInput(event.target.value, 'groupId')}
-                value={userData.groupId}>
+                value={userData.groupId ? userData.groupId : ''}>
+                <option value="">Select group</option>
                 {userGroup &&
                   userGroup.length > 0 &&
                   userGroup.map((item, index) => {
@@ -218,7 +221,8 @@ const ModalUser = (props) => {
                 id="gender"
                 name="gender"
                 onChange={(event) => handleOnChangeInput(event.target.value, 'sex')}
-                value={userData.sex}>
+                value={userData.sex ? userData.sex : ''}>
+                <option value="">Select sex</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
