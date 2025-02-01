@@ -52,7 +52,6 @@ const Login = (props) => {
         account: { groupWithRoles, email, username },
       };
 
-      sessionStorage.setItem('account', JSON.stringify(data));
       toast.success(res.EM);
       loginContext(data);
       history.push('/users');
@@ -71,14 +70,6 @@ const Login = (props) => {
       handleLogin();
     }
   };
-
-  useEffect(() => {
-    let sessionAccount = sessionStorage.getItem('account');
-    if (sessionAccount) {
-      history.push('/');
-      window.location.reload();
-    }
-  }, []);
 
   return (
     <div className="login-container">
@@ -102,7 +93,7 @@ const Login = (props) => {
             />
             <input
               value={password}
-              onKeyPress={(e) => {
+              onKeyDown={(e) => {
                 handlePressEnter(e);
               }}
               onChange={(e) => {

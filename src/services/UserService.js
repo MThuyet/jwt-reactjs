@@ -36,4 +36,8 @@ const updateUser = async (userData) => {
   return axios.put('/api/user/update', { ...userData });
 };
 
-export { RegisterUser, LoginUser, fetchAllUser, deleteUser, fetchGroup, createNewUser, updateUser };
+const getUserAccount = async () => {
+  return axios.get('/api/account');
+};
+
+export { RegisterUser, LoginUser, fetchAllUser, deleteUser, fetchGroup, createNewUser, updateUser, getUserAccount };
