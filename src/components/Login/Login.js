@@ -3,8 +3,12 @@ import { Link, useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { LoginUser } from '../../services/UserService';
+import React from 'react';
+import { UserContext } from '../../context/UserContext';
 
 const Login = (props) => {
+  const { loginContext } = React.useContext(UserContext);
+
   let history = useHistory();
 
   // init state
@@ -37,15 +41,22 @@ const Login = (props) => {
 
     // success
     if (res && +res.EC === 0) {
+      let groupWithRoles = res.DT.groupWithRoles;
+      let email = res.DT.email;
+      let username = res.DT.username;
+      let token = res.DT.access_token;
+
       let data = {
         isAuthenticated: true,
-        token: 'fake token',
+        token,
+        account: { groupWithRoles, email, username },
       };
 
       sessionStorage.setItem('account', JSON.stringify(data));
       toast.success(res.EM);
+      loginContext(data);
       history.push('/users');
-      window.location.reload();
+      // window.location.reload();
     }
 
     // fail
