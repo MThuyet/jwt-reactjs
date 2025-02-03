@@ -12,4 +12,8 @@ const deleteRole = async (role) => {
   return axios.delete('/api/role/delete', { data: { id: role.id } });
 };
 
-export { createRoles, fetchAllRoles, deleteRole };
+const fetchRolesByGroup = async (groupId) => {
+  return axios.get(`/api/role/by-group/${groupId}`);
+};
+
+export { createRoles, fetchAllRoles, deleteRole, fetchRolesByGroup };
