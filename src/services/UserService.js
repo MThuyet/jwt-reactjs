@@ -40,4 +40,9 @@ const getUserAccount = async () => {
   return axios.get('/api/account');
 };
 
-export { RegisterUser, LoginUser, fetchAllUser, deleteUser, fetchGroup, createNewUser, updateUser, getUserAccount };
+// logout
+const LogoutUser = () => {
+  return axios.post('/api/logout');
+};
+
+export { RegisterUser, LoginUser, fetchAllUser, deleteUser, fetchGroup, createNewUser, updateUser, getUserAccount, LogoutUser };
