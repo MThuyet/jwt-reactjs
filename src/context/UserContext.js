@@ -45,11 +45,7 @@ const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (window.location.pathname !== '/' && window.location.pathname !== '/login') {
-      fetchUser();
-    } else {
-      setUser({ ...defaultDataUser, isLoading: false });
-    }
+    fetchUser();
   }, []);
 
   return <UserContext.Provider value={{ user, loginContext, logoutContext }}>{children}</UserContext.Provider>;

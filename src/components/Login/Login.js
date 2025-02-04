@@ -1,5 +1,5 @@
 import './Login.scss';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { LoginUser } from '../../services/UserService';
@@ -7,9 +7,16 @@ import React from 'react';
 import { UserContext } from '../../context/UserContext';
 
 const Login = (props) => {
-  const { loginContext } = React.useContext(UserContext);
+  const { user, loginContext } = React.useContext(UserContext);
 
   let history = useHistory();
+
+  useEffect(() => {
+    if (user && user.isAuthenticated === true) {
+      toast.warning('You are already login');
+      history.push('/');
+    }
+  }, []);
 
   // init state
   const [valueLogin, setValueLogin] = useState('');
@@ -53,10 +60,9 @@ const Login = (props) => {
       };
 
       toast.success(res.EM);
+      history.push('/');
       localStorage.setItem('jwt', token);
       loginContext(data);
-      history.push('/users');
-      // window.location.reload();
     }
 
     // fail
@@ -124,6 +130,12 @@ const Login = (props) => {
             <div className="text-center">
               <Link to="/register" className="btn btn-success">
                 Create new account
+              </Link>
+            </div>
+
+            <div className="text-center">
+              <Link to="/" className="text-decoration-none">
+                Back to home
               </Link>
             </div>
           </div>

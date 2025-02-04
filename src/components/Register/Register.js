@@ -1,15 +1,21 @@
 import './Register.scss';
 import axios from 'axios';
 import { Link, useHistory } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { RegisterUser } from '../../services/UserService';
+import { UserContext } from '../../context/UserContext';
 
 const Register = (props) => {
+  const { user } = React.useContext(UserContext);
+
   let history = useHistory();
-  // useEffect(() => {
-  //   // axios.get('http://localhost:8080/api/test-api').then((res) => console.log(res));
-  // }, []);
+  useEffect(() => {
+    if (user && user.isAuthenticated === true) {
+      toast.warning('You are already login');
+      history.push('/');
+    }
+  }, [user]);
 
   // init state
   const [email, setEmail] = useState('');

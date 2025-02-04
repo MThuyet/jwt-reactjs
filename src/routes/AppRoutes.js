@@ -12,8 +12,6 @@ const AppRoutes = (props) => {
       <Switch>
         <PrivateRoutes path="/users" component={Users} />
 
-        <PrivateRoutes path="/projects" component={Users} />
-
         <PrivateRoutes path="/role" component={Role} />
 
         <PrivateRoutes path="/group-role" component={GroupRole} />
