@@ -1,6 +1,6 @@
 import axios from '../setup/axios';
 
-const createRoles = async (roles) => {
+const createRoles = (roles) => {
   return axios.post('/api/role/create', roles);
 };
 
@@ -8,12 +8,16 @@ const fetchAllRoles = () => {
   return axios.get('/api/role/read');
 };
 
-const deleteRole = async (role) => {
+const deleteRole = (role) => {
   return axios.delete('/api/role/delete', { data: { id: role.id } });
 };
 
-const fetchRolesByGroup = async (groupId) => {
+const fetchRolesByGroup = (groupId) => {
   return axios.get(`/api/role/by-group/${groupId}`);
 };
 
-export { createRoles, fetchAllRoles, deleteRole, fetchRolesByGroup };
+const assignRoleToGroup = (data) => {
+  return axios.post('/api/role/assign-to-group', data);
+};
+
+export { createRoles, fetchAllRoles, deleteRole, fetchRolesByGroup, assignRoleToGroup };
